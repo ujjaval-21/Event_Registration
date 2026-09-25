@@ -1,0 +1,38 @@
+{% extends 'base.html' %}{% block title %}Settings | EventFlow{% endblock %}{% block main %}
+<div class="page-heading">
+  <div>
+    <p class="eyebrow mb-2">PREFERENCES</p>
+    <h1>Settings</h1>
+    <p>Personalize your EventFlow experience.</p>
+  </div>
+</div>
+<div class="content-card settings-card">
+  <div class="settings-row">
+    <span class="settings-icon"><i class="bi bi-moon-stars"></i></span>
+    <div class="flex-grow-1">
+      <h2>Appearance</h2>
+      <p>Choose between light and dark mode.</p>
+    </div>
+    <button class="theme-switch" data-theme-toggle aria-label="Toggle theme">
+      <i class="bi bi-sun-fill"></i><span data-theme-label>Light</span>
+    </button>
+  </div>
+  <hr />
+  <div class="settings-row">
+    <span class="settings-icon danger"
+      ><i class="bi bi-box-arrow-right"></i
+    ></span>
+    <div class="flex-grow-1">
+      <h2>Log out</h2>
+      <p>End your session on this device.</p>
+    </div>
+    <button
+      class="btn btn-outline-danger rounded-pill"
+      data-bs-toggle="modal"
+      data-bs-target="#logoutModal"
+    >
+      Log out
+    </button>
+  </div>
+</div>
+{% endblock %}

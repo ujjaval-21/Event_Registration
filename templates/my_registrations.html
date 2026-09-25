@@ -1,0 +1,78 @@
+{% extends 'base.html' %}{% block title %}Registered events | EventFlow{% endblock %}{% block main %}
+<div class="page-heading">
+  <div>
+    <p class="eyebrow mb-2">YOUR PLANS</p>
+    <h1>Registered events</h1>
+    <p>All the events you're attending.</p>
+  </div>
+  <a
+    class="btn btn-outline-primary rounded-pill px-4"
+    href="{% url 'events:list' %}"
+    >Browse events</a
+  >
+</div>
+<div class="content-card table-card">
+  <div class="table-responsive">
+    <table class="table align-middle mb-0">
+      <thead>
+        <tr>
+          <th>Event</th>
+          <th>Date & time</th>
+          <th>Status</th>
+          <th class="text-end">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for registration in registrations %}
+        <tr>
+          <td>
+            <a
+              class="fw-semibold text-decoration-none"
+              href="{{ registration.event.get_absolute_url }}"
+              >{{ registration.event.title }}</a
+            >
+            <div class="small text-secondary">
+              <i class="bi bi-geo-alt"></i> {{ registration.event.venue }}
+            </div>
+          </td>
+          <td>
+            {{ registration.event.date|date:'M j, Y' }}
+            <div class="small text-secondary">
+              {{ registration.event.time|time:'g:i A' }}
+            </div>
+          </td>
+          <td>
+            <span
+              class="status-pill {% if registration.status == 'active' %}active{% else %}cancelled{% endif %}"
+              >{{ registration.get_status_display }}</span
+            >
+          </td>
+          <td class="text-end">
+            {% if registration.status == 'active' %}
+            <form
+              method="post"
+              action="{% url 'registrations:cancel' registration.pk %}"
+              class="d-inline"
+              onsubmit="return confirm('Cancel this registration?');"
+            >
+              {% csrf_token %}<button
+                class="btn btn-sm btn-outline-danger rounded-pill"
+              >
+                Cancel
+              </button>
+            </form>
+            {% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td class="text-center py-5 text-secondary" colspan="4">
+            You have not registered for an event yet.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

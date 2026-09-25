@@ -1,0 +1,44 @@
+{% extends 'base.html' %}{% block title %}My events | EventFlow{% endblock %}{% block main %}
+<div class="page-heading">
+  <div>
+    <p class="eyebrow mb-2">ORGANIZE</p>
+    <h1>My events</h1>
+    <p>Events you've created and manage.</p>
+  </div>
+  <a class="btn btn-primary rounded-pill px-4" href="{% url 'events:create' %}"
+    ><i class="bi bi-plus-lg me-1"></i>Create event</a
+  >
+</div>
+<div class="row g-4">
+  {% for event in events %}
+  <div class="col-md-6">
+    <article class="event-card">
+      <div class="event-date">
+        <strong>{{ event.date|date:'d' }}</strong
+        ><span>{{ event.date|date:'M' }}</span>
+      </div>
+      <div class="flex-grow-1">
+        <p class="event-meta">
+          {{ event.venue }} Â· {{ event.available_seats }} seats left
+        </p>
+        <h3>{{ event.title }}</h3>
+        <a href="{{ event.get_absolute_url }}"
+          >Manage event <i class="bi bi-arrow-up-right"></i
+        ></a>
+      </div>
+    </article>
+  </div>
+  {% empty %}
+  <div class="col-12">
+    <div class="empty-state">
+      <i class="bi bi-calendar2-plus"></i>
+      <h3>Create your first event</h3>
+      <p>Share an occasion people will remember.</p>
+      <a class="btn btn-primary rounded-pill" href="{% url 'events:create' %}"
+        >Create event</a
+      >
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

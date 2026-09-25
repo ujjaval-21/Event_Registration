@@ -1,0 +1,23 @@
+{% extends 'base.html' %}{% block title %}My profile | EventFlow{% endblock %}{% block main %}
+<div class="page-heading">
+  <div>
+    <p class="eyebrow mb-2">ACCOUNT</p>
+    <h1>My profile</h1>
+    <p>Your personal account details.</p>
+  </div>
+</div>
+<div class="content-card profile-card">
+  <div class="profile-avatar">
+    {{ user.first_name|default:user.username|slice:':1'|upper }}
+  </div>
+  <h2>{{ user.get_full_name|default:user.username }}</h2>
+  <p class="text-secondary">{{ user.email|default:'Email not provided' }}</p>
+  <hr />
+  <dl class="row mb-0">
+    <dt class="col-sm-4">Username</dt>
+    <dd class="col-sm-8">{{ user.username }}</dd>
+    <dt class="col-sm-4">Member since</dt>
+    <dd class="col-sm-8">{{ user.date_joined|date:'F j, Y' }}</dd>
+  </dl>
+</div>
+{% endblock %}

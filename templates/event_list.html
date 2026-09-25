@@ -1,0 +1,57 @@
+{% extends 'base.html' %} {% block title %}Explore events | EventFlow{% endblock %} {% block main %}
+<div class="page-heading">
+  <div>
+    <p class="eyebrow mb-2">DISCOVER</p>
+    <h1>Explore events</h1>
+    <p>Find experiences made for your next great memory.</p>
+  </div>
+  {% if user.is_authenticated %}<a
+    class="btn btn-primary rounded-pill px-4"
+    href="{% url 'events:create' %}"
+    ><i class="bi bi-plus-lg me-1"></i>Create event</a
+  >{% endif %}
+</div>
+<div class="row g-4">
+  {% for event in events %}
+  <div class="col-md-6 col-xl-4">
+    <article class="event-list-card">
+      {% if event.image %}<img
+        src="{{ event.image.url }}"
+        alt="{{ event.title }}"
+      />{% else %}
+      <div class="event-image-placeholder">
+        <i class="bi bi-calendar-event"></i>
+      </div>
+      {% endif %}
+      <div class="p-4">
+        <p class="event-meta">
+          {{ event.date|date:'M j, Y' }} Â· {{ event.time|time:'g:i A' }}
+        </p>
+        <h2>{{ event.title }}</h2>
+        <p class="text-secondary small">
+          {{ event.description|truncatewords:16 }}
+        </p>
+        <div class="d-flex justify-content-between align-items-center mt-3">
+          <span class="small text-secondary"
+            ><i class="bi bi-geo-alt"></i> {{ event.venue }}</span
+          ><a
+            class="stretched-link"
+            href="{{ event.get_absolute_url }}"
+            aria-label="View {{ event.title }}"
+            ><i class="bi bi-arrow-up-right-circle fs-4"></i
+          ></a>
+        </div>
+      </div>
+    </article>
+  </div>
+  {% empty %}
+  <div class="col-12">
+    <div class="empty-state">
+      <i class="bi bi-calendar-x"></i>
+      <h3>No events yet</h3>
+      <p>Check back soon for new experiences.</p>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

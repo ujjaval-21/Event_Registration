@@ -1,0 +1,46 @@
+{% extends 'base.html' %}{% block title %}Saved events | EventFlow{% endblock %}{% block main %}
+<div class="page-heading">
+  <div>
+    <p class="eyebrow mb-2">YOUR SHORTLIST</p>
+    <h1>Saved events</h1>
+    <p>Keep track of events you don't want to miss.</p>
+  </div>
+  <a
+    class="btn btn-outline-primary rounded-pill px-4"
+    href="{% url 'events:list' %}"
+    >Explore events</a
+  >
+</div>
+<div class="row g-4">
+  {% for saved in saved_events %}
+  <div class="col-md-6">
+    <article class="event-card">
+      <div class="event-date">
+        <strong>{{ saved.event.date|date:'d' }}</strong
+        ><span>{{ saved.event.date|date:'M' }}</span>
+      </div>
+      <div>
+        <p class="event-meta">
+          {{ saved.event.time|time:'g:i A' }} Â· {{ saved.event.venue }}
+        </p>
+        <h3>{{ saved.event.title }}</h3>
+        <a href="{{ saved.event.get_absolute_url }}"
+          >View event <i class="bi bi-arrow-up-right"></i
+        ></a>
+      </div>
+    </article>
+  </div>
+  {% empty %}
+  <div class="col-12">
+    <div class="empty-state">
+      <i class="bi bi-bookmark-heart"></i>
+      <h3>No saved events</h3>
+      <p>Save events to build your perfect calendar.</p>
+      <a class="btn btn-primary rounded-pill" href="{% url 'events:list' %}"
+        >Explore events</a
+      >
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

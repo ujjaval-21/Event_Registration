@@ -1,0 +1,32 @@
+{% extends 'base.html' %}{% block title %}Create event | EventFlow{% endblock %}{% block main %}
+<div class="form-wrap">
+  <div class="page-heading compact">
+    <div>
+      <p class="eyebrow mb-2">CREATE</p>
+      <h1>Create an event</h1>
+      <p>Share an experience people will love.</p>
+    </div>
+  </div>
+  <div class="content-card">
+    <form method="post" enctype="multipart/form-data" novalidate>
+      {% csrf_token %}{% for field in form %}
+      <div class="mb-3">
+        <label class="form-label" for="{{ field.id_for_label }}"
+          >{{ field.label }}</label
+        >{{ field }}{% for error in field.errors %}
+        <div class="text-danger small mt-1">{{ error }}</div>
+        {% endfor %}
+      </div>
+      {% endfor %}
+      <div class="d-flex gap-2 mt-4">
+        <button class="btn btn-primary rounded-pill px-4">Create event</button
+        ><a
+          class="btn btn-light rounded-pill px-4"
+          href="{% url 'events:list' %}"
+          >Cancel</a
+        >
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

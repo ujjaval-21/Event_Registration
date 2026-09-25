@@ -1,0 +1,76 @@
+{% extends 'base.html' %}{% block title %}{{ event.title }} | EventFlow{% endblock %}{% block main %}
+<div class="detail-wrap">
+  <a class="back-link" href="{% url 'events:list' %}"
+    ><i class="bi bi-arrow-left"></i> All events</a
+  >
+  <article class="content-card event-detail mt-3">
+    {% if event.image %}<img
+      src="{{ event.image.url }}"
+      alt="{{ event.title }}"
+    />{% endif %}
+    <div class="p-4 p-md-5">
+      <p class="eyebrow mb-2">
+        {{ event.date|date:'l, F j, Y' }} Â· {{ event.time|time:'g:i A' }}
+      </p>
+      <h1>{{ event.title }}</h1>
+      <p class="lead text-secondary">{{ event.description|linebreaksbr }}</p>
+      <div class="detail-facts">
+        <span><i class="bi bi-geo-alt"></i> {{ event.venue }}</span
+        ><span
+          ><i class="bi bi-people"></i> {{ event.available_seats }} of {{ event.capacity }} seats left</span
+        >
+      </div>
+      <p class="small text-secondary mt-4">
+        Created by {{ event.created_by.get_full_name|default:event.created_by.username }}
+      </p>
+      <div class="d-flex flex-wrap gap-2 mt-4">
+        {% if user.is_authenticated and user != event.created_by %}
+        <form
+          method="post"
+          action="{% url 'registrations:register' event.pk %}"
+        >
+          {% csrf_token %}
+          <button
+            class="btn btn-primary rounded-pill px-4"
+            {% if event.available_seats == 0 %}disabled{% endif %}
+          >
+            {% if event.available_seats == 0 %}Event full{% else %}Register
+            now{% endif %}
+          </button>
+        </form>
+        <form method="post" action="{% url 'events:toggle_saved' event.pk %}">
+          {% csrf_token %}<input
+            type="hidden"
+            name="next"
+            value="{{ request.path }}"
+          /><button class="btn btn-light rounded-pill px-4">
+            <i
+              class="bi {% if is_saved %}bi-bookmark-heart-fill{% else %}bi-bookmark-heart{% endif %} me-1"
+            ></i
+            >{% if is_saved %}Saved{% else %}Save event{% endif %}
+          </button>
+        </form>
+        {% elif not user.is_authenticated %}<a
+          class="btn btn-primary rounded-pill px-4"
+          href="{% url 'users:login' %}?next={{ request.path|urlencode }}"
+          >Log in to register</a
+        >{% endif %}{% if user == event.created_by %}<a
+          class="btn btn-primary rounded-pill px-4"
+          href="{% url 'events:edit' event.pk %}"
+          >Edit event</a
+        >
+        <form
+          method="post"
+          action="{% url 'events:delete' event.pk %}"
+          onsubmit="return confirm('Delete this event?');"
+        >
+          {% csrf_token %}<button class="btn btn-outline-danger rounded-pill">
+            Delete
+          </button>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+  </article>
+</div>
+{% endblock %}

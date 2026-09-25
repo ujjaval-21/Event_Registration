@@ -1,0 +1,119 @@
+{% load static %} <!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Log in | EventFlow</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  </head>
+  <body class="auth-page">
+    <main class="auth-layout">
+      <section class="auth-aside">
+        <a class="auth-brand" href="{% url 'users:home' %}"
+          ><span><i class="bi bi-stars"></i></span>EventFlow</a
+        >
+        <div class="auth-aside-copy">
+          <span class="hero-pill"
+            ><i class="bi bi-compass-fill"></i> Find your people</span
+          >
+          <h1>More plans.<br /><em>More life.</em></h1>
+          <p>
+            Discover experiences, meet new people, and keep every great moment
+            in one place.
+          </p>
+        </div>
+        <div class="auth-mini-card">
+          <span class="auth-mini-icon"
+            ><i class="bi bi-calendar-heart"></i
+          ></span>
+          <div>
+            <strong>Your next experience awaits</strong
+            ><small>Explore events made for you</small>
+          </div>
+        </div>
+        <div class="auth-orb"></div>
+      </section>
+      <section class="auth-form-area">
+        <a class="auth-back" href="{% url 'users:home' %}"
+          ><i class="bi bi-arrow-left"></i><span>Back to home</span></a
+        >
+        <div class="auth-panel">
+          <div class="auth-heading">
+            <span class="auth-heading-icon"
+              ><i class="bi bi-person-check"></i
+            ></span>
+            <h2>Welcome back</h2>
+            <p>Log in to pick up where you left off.</p>
+          </div>
+          <form method="post" novalidate>
+            {% csrf_token %}{% if next %}<input
+              type="hidden"
+              name="next"
+              value="{{ next }}"
+            />{% endif %}{% if form.non_field_errors %}
+            <div class="form-error-summary" role="alert">
+              <i class="bi bi-exclamation-circle-fill"></i>
+              <div>
+                {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+              </div>
+            </div>
+            {% endif %}{% for field in form %}
+            <div class="auth-field">
+              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+              <div class="input-wrap">
+                <i
+                  class="bi {% if field.name == 'password' %}bi-lock{% else %}bi-person{% endif %}"
+                ></i
+                >{{ field }}{% if field.name == 'password' %}<button
+                  class="password-toggle"
+                  type="button"
+                  data-password-toggle
+                  aria-label="Show password"
+                >
+                  <i class="bi bi-eye"></i></button
+                >{% endif %}
+              </div>
+              {% for error in field.errors %}
+              <p class="field-error">
+                <i class="bi bi-exclamation-circle"></i>{{ error }}
+              </p>
+              {% endfor %}
+            </div>
+            {% endfor %}<button
+              class="btn btn-primary auth-submit"
+              type="submit"
+            >
+              Log in <i class="bi bi-arrow-right"></i>
+            </button>
+          </form>
+          <p class="auth-switch">
+            New to EventFlow?
+            <a href="{% url 'users:register' %}">Create an account</a>
+          </p>
+        </div>
+      </section>
+    </main>
+    <script>
+      document.querySelectorAll("[data-password-toggle]").forEach((button) =>
+        button.addEventListener("click", () => {
+          const input = button.parentElement.querySelector("input");
+          const showing = input.type === "text";
+          input.type = showing ? "password" : "text";
+          button.innerHTML = `<i class="bi bi-eye${showing ? "" : "-slash"}"></i>`;
+          button.setAttribute(
+            "aria-label",
+            showing ? "Show password" : "Hide password",
+          );
+        }),
+      );
+    </script>
+  </body>
+</html>
