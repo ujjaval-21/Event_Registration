@@ -7,6 +7,7 @@ from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST
 from django.contrib.messages import get_messages
 from .forms import LoginForm, RegistrationForm
+from django.http import JsonResponse
 
 
 def home(request):
@@ -92,3 +93,12 @@ def profile(request):
 @login_required
 def settings_view(request):
     return render(request, "settings.html")
+
+
+def health(request):
+    return JsonResponse({
+        "status": "ok",
+        "success": True,
+        "message": "EventFlow Backend is healthy"
+    })
+
